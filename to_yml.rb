@@ -52,7 +52,7 @@ end
 
 data = {}
 index = 1
-app_path = '/home/kirill/projects/mst/valkyrie/app'
+app_path = '/Users/kirill/projects/valkyrie/app'
 texts_path = File.expand_path(File.dirname(__FILE__) + '/texts.txt')
 
 `find #{app_path} -type f -exec grep -HnR '[а-яА-я]' {} \\; > #{texts_path}`
@@ -67,6 +67,7 @@ File.open(texts_path).each do |line|
   path = match[1].strip
   extname = File.extname(path)
   norm_path = remove_extname(path)
+  norm_path.sub!('views/', '')
   pathes = norm_path.split('/')
   line_number = match[2].strip
   text = match[3].strip
@@ -110,5 +111,7 @@ end
 
 puts index
 puts c_index
-File.write('/tmp/ru.yml', { ru: data }.to_yaml)
+path = File.expand_path(File.dirname(__FILE__) + '/tmp')
+Dir.mkdir(path) unless Dir.exists?(path)
+File.write("#{path}/ru.yml", { ru: data }.to_yaml)
 
